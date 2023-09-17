@@ -6,7 +6,9 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import ToastNotification from '../../components/Toast/ToastNotification';
-import  {HiShoppingCart} from 'react-icons/hi';
+import Placeholder from 'react-bootstrap/Placeholder';
+import ButtonCart from '../../components/Button/ButtonCart';
+
 
 
 function ProductView(props) {
@@ -14,12 +16,14 @@ function ProductView(props) {
   //console.log(productid)
   const [product,setProduct]=useState({name:null,description:null,price:null,quantityInStock:null});
   const [successOpCart, setSuccessOpCart] = useState(false);
+  const [loading,setLoading]=useState(true);
 
 
   useEffect(()=>{
-    
+    setLoading(true);
     axios.get('http://localhost:8081/product/getProductById/'+productid,{withCredentials: true})
     .then(res=>{
+      
         console.log(res.data);
         let prod=res.data;
         setProduct({
@@ -28,20 +32,28 @@ function ProductView(props) {
           price: prod.price,
           quantityInStock: prod.quantityInStock
         })
-        
+        setLoading(false);
     }).catch(()=>{
         console.log('failed to fetch feeds');
+        setLoading(false);
     });
 }
 ,[])
 
 
 const addItemToCart = () => {
+  setLoading(true);
   axios.post('http://localhost:8081/cart/addProductsToCart/'+productid,{},{withCredentials: true})
   .then(res=>{
+   
+
       console.log(res.data);
       setSuccessOpCart(true);
+      setLoading(false);
+
   }).catch(()=>{
+    setLoading(false);
+
       console.log('failed to to add cart');
   });
   };
@@ -59,12 +71,12 @@ const addItemToCart = () => {
       <Container >
         <Card className='m-3'>
           <Card.Body>
-          <Card.Title>Product Name : {product.name}</Card.Title>
-          <Card.Subtitle>description : {product.description}</Card.Subtitle>
-          <Card.Text className="m-0">Product price : {product.price}</Card.Text>
-          <Card.Text className="m-0">Quantity In Stock : {product.quantityInStock}</Card.Text>
+          <Card.Title>Product Name : {product.name?product.name: <Placeholder xs={6} />}</Card.Title>
+          <Card.Subtitle>description : {product.description?product.description: <Placeholder xs={3} />}</Card.Subtitle>
+          <Card.Text className="m-0">Product price : {product.price?product.price: <Placeholder xs={4} />}</Card.Text>
+          <Card.Text className="m-0">Quantity In Stock : {product.quantityInStock?product.quantityInStock: <Placeholder xs={6} />}</Card.Text>
         
-          <Button className='m-1' variant="primary" onClick={addItemToCart.bind(this)}>Add to Cart <HiShoppingCart></HiShoppingCart></Button>
+          <ButtonCart onClick={addItemToCart.bind(this)} loading={loading} ></ButtonCart>
           <Button className='m-1' onClick={navigateToCart.bind(this)} variant="primary" >Go to Cart</Button>
           <Button className='m-1' onClick={navigateToHome.bind(this)} variant="primary">Back</Button>
           </Card.Body>

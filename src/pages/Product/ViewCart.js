@@ -7,6 +7,7 @@ import CartItem from '../../components/Cart/CartItem';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import ToastNotification from '../../components/Toast/ToastNotification';
+import Spinner from 'react-bootstrap/Spinner';
 import  {BsCurrencyRupee} from 'react-icons/bs';
 import  {HiShoppingCart} from 'react-icons/hi';
 
@@ -16,22 +17,26 @@ function ViewCart() {
     const [incrementDecrementStatus,setIncrementDecrementStatus]=useState(false);
     const [placeOrderStatusSuccess,setPlaceOrderStatusSuccess]=useState(false);
     const [emptyCart,setEmptyCart]=useState(false);
+    const [loading,setLoading]=useState(true);
+
     const navigate = useNavigate();
 
     useEffect(()=>{
-    
+        
         axios.get('http://localhost:8081/cart/getCart',{withCredentials: true})
         .then(res=>{
             //console.log(res.data);
             
             setCart(res.data);
             console.log(cart);
+           
            if(res.data.cart?.length===[].length||res.data.items?.length===[].length ){
             setEmptyCart(true);
            }else{
             setDataLoad(true);
             //setEmptyCart(false);
            }
+           setLoading(false);
         }).catch((err)=>{
             console.log('failed to fetch feeds'+err.message);
         });
@@ -63,6 +68,7 @@ function ViewCart() {
         };
 
         const placeOrder=async ()=>{
+            setLoading(true);
             let cartdata=cart;
             console.log(cartdata);
             try{
@@ -76,6 +82,7 @@ function ViewCart() {
                 }catch(err){
                     console.log('failed to place order '+err);
                 }
+                setLoading(false);
         };
         
 
@@ -92,8 +99,8 @@ function ViewCart() {
             <ListGroup.Item key={idx}>
                 <CartItem  order={false} 
                 product={product}
-                incrementQuantityCount={incrementCount.bind(this)}
-                decrementQuantityCount={decrementQuantityCount.bind(this)}></CartItem>
+                incrementQuantityCount={incrementCount}
+                decrementQuantityCount={decrementQuantityCount}></CartItem>
             </ListGroup.Item>
             ))}
 
@@ -105,7 +112,10 @@ function ViewCart() {
                         }).reduce((total,subtotal)=>total+subtotal)} 
                     <BsCurrencyRupee></BsCurrencyRupee>    
             </Card.Title>
-                <Button className='m-1 ' onClick={placeOrder.bind(this)}  variant="primary" >Place Order <HiShoppingCart></HiShoppingCart></Button>
+                <Button className='m-1 ' onClick={placeOrder.bind(this)}  variant="primary" disabled={loading}>
+                    Place Order <HiShoppingCart></HiShoppingCart>
+                    {loading && <Spinner animation="border" size="sm" />}
+                </Button>
             </ListGroup.Item>
             )}
             {emptyCart&&

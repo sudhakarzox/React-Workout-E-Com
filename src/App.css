@@ -1,1 +1,5 @@
 
+.App {
+    
+    font-size: calc(0.55em + 1vmin);
+  }

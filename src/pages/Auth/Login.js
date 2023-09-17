@@ -1,26 +1,27 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
 import { Link } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import {useNavigate} from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../../context';
+import Spinner from 'react-bootstrap/Spinner';
 
 function Login(){
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [errorLoginFail, setErrorLoginFail] = useState(false);
     const {auth,setAuthContext} = useContext(AuthContext)
+    const [loading,setLoading]=useState(false);
 
     const navigate = useNavigate();
 
     const handleSubmit=(event )=>{
         event.preventDefault();
+        setLoading(true);
         setErrorLoginFail(false);
         axios.post('http://localhost:8080/auth/login',
                     {email: email,password: password},
@@ -28,10 +29,12 @@ function Login(){
         .then(res=>{
             console.log(res.data);
             setAuthContext(true);
+            setLoading(false);
             navigate('/Home');
         }).catch(()=>{
             console.log('login failed',email);
             setErrorLoginFail(true);
+            setLoading(false);
         });
     };
 
@@ -51,8 +54,8 @@ function Login(){
             </Form.Group>
             { errorLoginFail && 
             <Alert variant="danger">Incorrect Email/Password...Try Again!</Alert>}            
-            <Button variant="primary" type="submit">
-                Log In
+            <Button variant="primary" type="submit" disabled={loading}>
+                Log In {loading && <Spinner animation="border" size="sm" />}
             </Button>
             <Button className="ms-3"  as={Link} to="/SignUp" type="submit">Sign In</Button>
          </Form>
