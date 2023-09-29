@@ -17,7 +17,7 @@ function App() {
   function setAuthContext(value){
     setAuth(value);
   }
-  console.log(auth)
+  //console.log(auth)
   return (
     <div className="App">
      

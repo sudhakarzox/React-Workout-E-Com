@@ -28,7 +28,7 @@ function ViewCart() {
             //console.log(res.data);
             
             setCart(res.data);
-            console.log(cart);
+            //console.log(cart);
            
            if(res.data.cart?.length===[].length||res.data.items?.length===[].length ){
             setEmptyCart(true);
@@ -47,7 +47,7 @@ function ViewCart() {
         setIncrementDecrementStatus(false);
         axios.delete('http://localhost:8081/cart/decrementProductQuantityFromCart/'+id,{withCredentials: true})
         .then(res=>{
-            console.log(res.data);
+            //console.log(res.data);
             setIncrementDecrementStatus(true);
             console.log(incrementDecrementStatus);
         }).catch(()=>{
@@ -59,7 +59,7 @@ function ViewCart() {
         setIncrementDecrementStatus(false);
         axios.post('http://localhost:8081/cart/addProductsToCart/'+id,{},{withCredentials: true})
         .then(res=>{
-            console.log(res.data);
+            //console.log(res.data);
             setIncrementDecrementStatus(true);
 
         }).catch(()=>{
@@ -70,13 +70,13 @@ function ViewCart() {
         const placeOrder=async ()=>{
             setLoading(true);
             let cartdata=cart;
-            console.log(cartdata);
+            //console.log(cartdata);
             try{
             let res= await axios.post('http://localhost:8082/order/postOrder',cartdata,{withCredentials: true});
-                    console.log(res.data);
+                    //console.log(res.data);
                     setPlaceOrderStatusSuccess(true);
                 res=  await axios.delete('http://localhost:8081/cart/clearCart',{withCredentials: true});
-                    console.log(res.data);
+                    //console.log(res.data);
                     //setEmptyCart(true);
                     navigate('/Orders');
                 }catch(err){
@@ -108,11 +108,11 @@ function ViewCart() {
             <ListGroup.Item>
             <Card.Title>Total : 
             {dataload && cart.items.map((Product)=>{
-                            return Product.quantity+Product.product.price;
+                            return Product.quantity*Product.product.price;
                         }).reduce((total,subtotal)=>total+subtotal)} 
                     <BsCurrencyRupee></BsCurrencyRupee>    
             </Card.Title>
-                <Button className='m-1 ' onClick={placeOrder.bind(this)}  variant="primary" disabled={loading}>
+                <Button className='m-1 ' onClick={placeOrder}  variant="primary" disabled={loading}>
                     Place Order <HiShoppingCart></HiShoppingCart>
                     {loading && <Spinner animation="border" size="sm" />}
                 </Button>

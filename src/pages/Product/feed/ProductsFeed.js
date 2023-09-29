@@ -17,7 +17,7 @@ function ProductsFeed() {
     setLoading(true);
         axios.get('http://localhost:8081/product/getProducts',{withCredentials: true})
         .then(res=>{
-            console.log(res.data);
+            //console.log(res.data);
             setProductFeed(res.data);
             setLoading(false);
         }).catch(()=>{

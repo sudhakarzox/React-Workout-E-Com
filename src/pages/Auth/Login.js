@@ -27,7 +27,7 @@ function Login(){
                     {email: email,password: password},
                     {withCredentials: true, credentials: 'include'})
         .then(res=>{
-            console.log(res.data);
+            //console.log(res.data);
             setAuthContext(true);
             setLoading(false);
             navigate('/Home');

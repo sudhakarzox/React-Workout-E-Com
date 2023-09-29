@@ -6,10 +6,12 @@ import Navbar from 'react-bootstrap/Navbar';
 import  {HiShoppingCart} from 'react-icons/hi';
 import  {AiFillHome} from 'react-icons/ai';
 import { AuthContext } from '../../context';
+import Cookies from 'js-cookie';
 function NavBar(){
     const {auth,setAuthContext} = useContext(AuthContext);
 
     const logout=()=>{
+        Cookies.remove('access_token');
         setAuthContext(false);
         console.log(auth);
     }
@@ -28,7 +30,7 @@ function NavBar(){
                 {!auth&&<Nav.Link as={Link} to="/SignUp">SignUp</Nav.Link>}
                 
                 {auth &&(<> <Nav.Link as={Link} to="/Cart">Cart<HiShoppingCart></HiShoppingCart></Nav.Link>
-                <Nav.Link onClick={logout.bind(this)}>Logout</Nav.Link></>)}
+                <Nav.Link onClick={logout}>Logout</Nav.Link></>)}
             </Nav>
             
             

@@ -24,7 +24,7 @@ function ProductView(props) {
     axios.get('http://localhost:8081/product/getProductById/'+productid,{withCredentials: true})
     .then(res=>{
       
-        console.log(res.data);
+        //console.log(res.data);
         let prod=res.data;
         setProduct({
           name: prod.name,
@@ -47,7 +47,7 @@ const addItemToCart = () => {
   .then(res=>{
    
 
-      console.log(res.data);
+      //console.log(res.data);
       setSuccessOpCart(true);
       setLoading(false);
 
@@ -70,18 +70,18 @@ const addItemToCart = () => {
     return (
       <Container >
         <Card className='m-3'>
+        <Card.Header as="h5">Product Details</Card.Header>
           <Card.Body>
           <Card.Title>Product Name : {product.name?product.name: <Placeholder xs={6} />}</Card.Title>
           <Card.Subtitle>description : {product.description?product.description: <Placeholder xs={3} />}</Card.Subtitle>
           <Card.Text className="m-0">Product price : {product.price?product.price: <Placeholder xs={4} />}</Card.Text>
           <Card.Text className="m-0">Quantity In Stock : {product.quantityInStock?product.quantityInStock: <Placeholder xs={6} />}</Card.Text>
         
-          <ButtonCart onClick={addItemToCart.bind(this)} loading={loading} ></ButtonCart>
-          <Button className='m-1' onClick={navigateToCart.bind(this)} variant="primary" >Go to Cart</Button>
-          <Button className='m-1' onClick={navigateToHome.bind(this)} variant="primary">Back</Button>
+          <ButtonCart onClick={addItemToCart} loading={loading} ></ButtonCart>
+          <Button className='m-1' onClick={navigateToCart} variant="primary" >Go to Cart</Button>
+          <Button className='m-1' onClick={navigateToHome} variant="primary">Back</Button>
           </Card.Body>
         </Card>
-{console.log('render')}
         <ToastNotification
             message="Item added to the cart"
             show={setSuccessOpCart}

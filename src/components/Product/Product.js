@@ -45,7 +45,7 @@ function Product(props) {
                     
                     <Card.Subtitle className="mb-2 text-muted">Price : {product.price}</Card.Subtitle>
                     <Button  as={Link} to={'/product/'+product.id}>Product details</Button>
-                    <ButtonCart onClick={addItemToCart.bind(this)} loading={loading} ></ButtonCart>
+                    <ButtonCart onClick={addItemToCart} loading={loading} ></ButtonCart>
                 </Card.Body>
             </Card>
 

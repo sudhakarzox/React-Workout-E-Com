@@ -18,7 +18,7 @@ function ViewOrder() {
         setLoading(true);
         axios.get('http://localhost:8082/order/getOrders',{withCredentials: true})
         .then(res=>{
-            console.log(res.data.orderDetails);
+            //console.log(res.data.orderDetails);
             if((res.data.orderDetails.length===[].length)){
                 setEmptyCart(true);
             }else{
